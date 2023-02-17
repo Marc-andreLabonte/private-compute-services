@@ -85,6 +85,10 @@ public class HttpGrpcBindableService extends HttpServiceGrpc.HttpServiceImplBase
   public void download(
       HttpDownloadRequest request, StreamObserver<HttpDownloadResponse> responseObserver) {
     logger.atInfo().log("Downloading requested for URL '%s'", request.getUrl());
+
+
+    // We only want to log the request attempt and not really issue it
+    return;
     // Snapshot config so we use consistent values for a single request.
     PcsHttpConfig config = configReader.getConfig();
 
@@ -320,6 +324,9 @@ public class HttpGrpcBindableService extends HttpServiceGrpc.HttpServiceImplBase
       logger.atFine().log(
           "onReadyHandler called for URL [%s]. Bytes sent so far: [%d].",
           request.getUrl(), totalBytesRead.get());
+    
+    // we dont want to go further for now
+    return; 
       boolean saveStreamToResumeWhenClientIsReadyAgain = false;
       try {
         while (bytesPendingToBeSent >= 0) {
